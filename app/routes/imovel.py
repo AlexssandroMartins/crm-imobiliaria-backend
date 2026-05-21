@@ -32,3 +32,17 @@ def listar_imoveis():
         "status": "sucesso",
         "dados": imoveis
     }
+
+@router.delete("/imoveis/{imovel_id}")
+def deletar_imovel(imovel_id: int):
+    db: Session = SessionLocal()
+
+    imovel = db.query(Imovel).filter(Imovel.id == imovel_id).first()
+
+    if not imovel:
+        return {"erro": "Imóvel não encontrado"}
+
+    db.delete(imovel)
+    db.commit()
+
+    return {"mensagem": "Imóvel deletado com sucesso"}
